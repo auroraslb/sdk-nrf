@@ -340,7 +340,12 @@ static int clock_control_init(struct device *dev)
 	 */
 
 	IRQ_CONNECT(DT_INST_IRQN(0), DT_INST_IRQ(0, priority),
-		    (void*)nrf_power_clock_isr, 0, 0);
+#ifdef CONFIG_SOC_SERIES_BSIM_NRFXX
+		    (void *)nrf_power_clock_isr,
+#else
+	      nrf_power_clock_isr,
+#endif
+	      0, 0);
 
 	sys_slist_init(&(mpsl_control_data->async_on_list));
 	mpsl_control_data->hfclk_count = 0;
